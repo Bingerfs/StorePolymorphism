@@ -53,6 +53,28 @@ public class Order {
 	}
 
 	public float total() {
+		float totalItems = calculateTotalForItems();
+		float tax = calculateTax(totalItems);
+		int shipping = calculateShipping();
+
+		// total=totalItemst + tax + 15 shipping
+		return totalItems + tax + shipping;
+	}
+
+	private int calculateShipping(){
+	    int shipping = 0;
+        if (this.deliveryCountry != "USA"){
+            // total=totalItems + tax + 0 shipping
+            shipping = 15;
+        }
+        return shipping;
+    }
+
+	private float calculateTax(float totalItems) {
+		return totalItems * 5 / 100;
+	}
+
+	private float calculateTotalForItems() {
 		float totalItems = 0;
 		for (OrderItem item : items) {
 			float totalItem=0;
@@ -77,13 +99,6 @@ public class Order {
 			}
 			totalItems += totalItem;
 		}
-
-		if (this.deliveryCountry == "USA"){
-			// total=totalItems + tax + 0 shipping
-			return totalItems + totalItems * 5 / 100;
-		}
-
-		// total=totalItemst + tax + 15 shipping
-		return totalItems + totalItems * 5 / 100 + 15;
+		return totalItems;
 	}
 }
